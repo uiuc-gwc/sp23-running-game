@@ -68,11 +68,16 @@ def key_released(event):
     if abs_error <= tolerance:
         step_rate = min(MAX_STEPRATE, step_rate + 0.5)
     else:
-        i = (5 - step_rate) / 10
-        penalty = min(i, (abs_error - tolerance) * 0.05)
-        step_rate = min(MAX_STEPRATE, step_rate + i - penalty)
+        if error < 0:
+            i = (5 - step_rate) / 10
+            penalty = -(abs_error - tolerance) * 0.05
+            step_rate = max(1, step_rate + i + penalty)
+        else:
+            i = (5 - step_rate) / 10
+            penalty = min(i, (abs_error - tolerance) * 0.05)
+            step_rate = min(MAX_STEPRATE, step_rate + i - penalty)
 
-    reset_keypress(key, error)
+    reset_keypress(key)
 
 
 # Resets all timing variables
@@ -128,8 +133,7 @@ def draw_position(position: int):
 
     left_horiz = -math.sin((-math.pi * time_to_left) / t) * 40
     right_horiz = -math.sin((-math.pi * time_to_right) / t) * 40
-    left_vert = abs(math.cos((-math.pi * time_to_left) / t)) * 40
-    right_vert = abs(math.cos((-math.pi * time_to_right) / t)) * 40
+    right_vert = left_vert = abs(math.cos((-math.pi * time_to_left) / t)) * 40
     left_knee = Vector(left_horiz, left_vert) + hip_pos
     right_knee = Vector(right_horiz, right_vert) + hip_pos
     if left_horiz > 0:
