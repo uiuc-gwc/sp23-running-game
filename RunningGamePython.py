@@ -1,6 +1,6 @@
-from p5 import *
 import math
 
+from p5 import *
 
 MAX_STEPRATE = 5
 # TRACK_LEN = 200
@@ -96,7 +96,6 @@ def draw_text():
     no_stroke()
 
     next_key = "A" if last_key == "D" else "D"
-    frames_to_go = target_frame_count() - frames_since_last
 
     text("Speed: {:.2f}".format(step_rate), (10, 20))
     text("Next key: " + next_key, (10, 80))
